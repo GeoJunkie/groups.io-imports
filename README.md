@@ -5,8 +5,8 @@ This set of import scripts is based on the [Groups.io Yahoo import script](http:
 
 # History
 
-2020-03-28: Updated naming convention and instructions
-2020-03-08: Initial commit with yahoo.ioimpport.pl v7
+* 2020-03-28: Updated naming convention and instructions
+* 2020-03-08: Initial commit with yahoo.ioimpport.pl v7
 
 # Usage Instructions
 
