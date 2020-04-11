@@ -271,7 +271,7 @@ foreach my $mbox_part ( @mbox_parts ) {
                 &ioct( 'w', " <$email>\015\012" );
               }
               if ( $name eq 'subject' ) {
-                &ioct( 'w', " #mi\015\012" );
+                &ioct( 'w', " #queernet\015\012" );
                 $hassubject = 1;
               }
               $name = lc $1 if defined $1;
@@ -282,7 +282,7 @@ foreach my $mbox_part ( @mbox_parts ) {
               $line =~ tr/<>()@/_/;
             }
             if ( $line eq '' and not $hassubject ) {
-              &ioct( 'w', "Subject: (no subject) #mi\015\012" );
+              &ioct( 'w', "Subject: (no subject) #queernet\015\012" );
             }
             if ( $name eq 'date' and $line ne '' ) {
               $date .= $line;
@@ -299,35 +299,35 @@ foreach my $mbox_part ( @mbox_parts ) {
         push @header, $_;
         $fromchanged = 1;
       }
-      elsif ( /^X-Deleted-Message: yes/ ) {
+      elsif ( $emailLine =~ /^X-Deleted-Message: yes/ ) {
         $deleted = 1;
       }
       else {
-        &boundary_text_base64;
-        push @header, $_;
+        boundary_text_base64($emailLine);
+        push @header, $emailLine;
       }
     }
     else {   # in body
       debugMsg ("processing Body!$emailLine");
         next if $deleted;
       if ( $goahead and $messages > $imported ) {
-        if ( /--\S/ ) {
+        if ( $emailLine =~ /--\S/ ) {
           foreach my $boundary ( @boundaries ) {
-            if ( /^--$boundary$/ ) {
+            if ( $emailLine =~ /^--$boundary$/ ) {
               $partheader = 1;
               $text = '';
               $base64 = 0;
             }
           }
         }
-        s/^\./../;
-        &ioct( 'w', "$_\015\012" );
+        $emailLine =~ s/^\./../;
+        &ioct( 'w', "$emailLine\015\012" );
         if ( $partheader ) {
           if ( 0 == length ) {
             &insert;
             $partheader = 0;
           }
-          &boundary_text_base64;
+          boundary_text_base64($emailLine);
         }
       }
     }
@@ -404,7 +404,7 @@ sub conn {
   die "after HELO: $line" unless $line =~ /^2/;
 }
 sub insert {
-  if ( $text =~ /plain|html/ and $fromchanged || $insert_date ) {
+  if ( $text =~ /plain|html/ and ($fromchanged || $insert_date) ) {
     my $what = '';
     $what = $original if $fromchanged;
     if ( $fromchanged and $insert_date ) {
@@ -422,13 +422,14 @@ sub insert {
   }
 }
 sub boundary_text_base64 {
-  if ( /boundary=["']?([^"'\s]+)/ ) {
+  my ($line) = @_;
+  if ( $line =~ /boundary=["']?([^"'\s]+)/ ) {
     push @boundaries, $1;
   }
-  if ( m!text/(plain|html)! ) {
+  if ( $line =~ m!text/(plain|html)! ) {
     $text = $1;
   }
-  if ( /^content-transfer-encoding:\s*base64/i ) {
+  if ( $line =~ /^content-transfer-encoding:\s*base64/i ) {
     $base64 = 1;
   }
 }

@@ -16,7 +16,7 @@ function die()
 [ -z "$path" ] && die "Pass archive directory as first argument."
 [ -z "$dest" ] && die "Pass destination mbox file name as second argument."
  
-# sanity checking
+# parameter checking
 [ ! -d "$path" ] && die "Can't find '$path'"
 touch "$dest" || die "Can't write to '$dest'"
  
