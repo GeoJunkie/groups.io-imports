@@ -13,4 +13,5 @@ This set of import scripts is based on the [Groups.io Yahoo import script](http:
 Each script will have its own usage instructions within it. Scripts are identified with the naming convention `{source}.{destination}.{extension}`. For example:
 
 * `yahoo.groupsio.pl` - A Perl script that reads exported files from Yahoo and imports them to groups.io
-* `sympa.mbox.bash` - A Bash script that reads exports from Sympa and creates MBOX files
+* `sympa.mbox.sh` - A Bash script that reads exports from Sympa and creates MBOX files
+*  `mbox.groupsio.pl` - A Perl script that reads *.mbox files and sends them to a groups.io group.

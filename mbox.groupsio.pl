@@ -271,7 +271,7 @@ foreach my $mbox_part ( @mbox_parts ) {
                 &ioct( 'w', " <$email>\015\012" );
               }
               if ( $name eq 'subject' ) {
-                &ioct( 'w', " #queernet\015\012" );
+                &ioct( 'w', " #mi\015\012" );
                 $hassubject = 1;
               }
               $name = lc $1 if defined $1;
@@ -282,7 +282,7 @@ foreach my $mbox_part ( @mbox_parts ) {
               $line =~ tr/<>()@/_/;
             }
             if ( $line eq '' and not $hassubject ) {
-              &ioct( 'w', "Subject: (no subject) #queernet\015\012" );
+              &ioct( 'w', "Subject: (no subject) #mi\015\012" );
             }
             if ( $name eq 'date' and $line ne '' ) {
               $date .= $line;
